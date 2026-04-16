@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Multither: Multiply and Play!</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="startScreen">
+<h1 id="gameTitle" 
+    data-lang-en="Multither: Multiply and Play!" 
+    data-lang-zh="乘蛇：乘法大冒险！"
+    style="color: darkgreen; font-size: 36px; margin-bottom: 10px;">
+  Multither: Multiply and Play!
+</h1>
+ <div id="gameRules" style="text-align: left; max-width: 600px; margin: 0 auto; font-size: 18px; background-color: rgba(255, 255, 255, 0.7); padding: 10px; border-radius: 10px;">
+  <h3 style="color: #004d40; text-align: center;"
+      data-lang-en="🎮 Game Rules"
+      data-lang-zh="🎮 游戏规则">
+    🎮 Game Rules
+  </h3>
+  <ol>
+    <li 
+      data-lang-en="<strong>Objective:</strong> Guide the snake to eat the correct answer to each multiplication question."
+      data-lang-zh="<strong>游戏目标：</strong> 操控乘蛇吃掉每一道乘法题的正确答案。">
+      <strong>Objective:</strong> Guide the snake to eat the correct answer to each multiplication question.
+    </li>
+    <li 
+      data-lang-en="<strong>Movement:</strong> Use the arrow keys (↑, ↓, ←, →) to control the snake."
+      data-lang-zh="<strong>操作方法：</strong> 使用方向键（↑ ↓ ← →）控制乘蛇移动。">
+      <strong>Movement:</strong> Use the arrow keys (↑, ↓, ←, →) to control the snake.
+    </li>
+    <li 
+      data-lang-en="<strong>Question Display:</strong> A multiplication question appears at the top. Choose the correct product from the answer options on the board."
+      data-lang-zh="<strong>题目显示：</strong> 每道乘法题会出现在上方，请选择正确答案所在的方块。">
+      <strong>Question Display:</strong> A multiplication question appears at the top. Choose the correct product from the answer options on the board.
+    </li>
+    <li 
+      data-lang-en="<strong>Scoring:</strong> +10 points for each correct answer; -1 point for each wrong answer or wall hit; bonus points awarded based on snake length at the end."
+      data-lang-zh="<strong>计分规则：</strong> 每答对一题得10分，答错或撞墙扣1分。游戏结束时根据乘蛇长度获得额外加分。">
+      <strong>Scoring:</strong> +10 points for each correct answer; -1 point for each wrong answer or wall hit; bonus points awarded based on snake length at the end.
+    </li>
+    <li 
+      data-lang-en="<strong>Duration:</strong> The game ends after 60 seconds or when 20 questions are answered."
+      data-lang-zh="<strong>时间限制：</strong> 游戏持续60秒或回答满20题即结束。">
+      <strong>Duration:</strong> The game ends after 60 seconds or when 20 questions are answered.
+    </li>
+    <li 
+      data-lang-en="<strong>End Result:</strong> Your final score includes accuracy, speed, and bonus points."
+      data-lang-zh="<strong>结算方式：</strong> 最终得分综合考虑答题准确率、答题速度和乘蛇长度的加分。">
+      <strong>End Result:</strong> Your final score includes accuracy, speed, and bonus points.
+    </li>
+  </ol>
+</div>
+
+<div class="settings-row">
+  <div class="setting-group">
+    <label for="languageSelect" data-lang-en="Language:" data-lang-zh="语言：">Language:</label>
+    <select id="languageSelect">
+      <option value="en">English</option>
+      <option value="zh">中文</option>
+    </select>
+  </div>
+
+<div style="margin-top: 10px;">
+  <button id="muteBtn"
+    style="font-size: 20px; padding: 6px 12px; background-color: #2d7c2f; color: white; border: none; border-radius: 5px; cursor: pointer;">
+    🔇
+  </button>
+</div>
+
+  <div class="setting-group">
+    <label for="levelSelect" data-lang-en="Times Table:" data-lang-zh="乘法表：">Times Table:</label>
+    <select id="levelSelect">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+    </select>
+  </div>
+
+  <div class="setting-group">
+    <label for="speedSelect" data-lang-en="Speed:" data-lang-zh="速度：">Speed:</label>
+    <select id="speedSelect">
+      <option value="400" data-lang-en="Slow" data-lang-zh="慢">Slow</option>
+      <option value="300" data-lang-en="Moderate" data-lang-zh="中等">Moderate</option>
+      <option value="200" data-lang-en="Fast" data-lang-zh="快">Fast</option>
+    </select>
+  </div>
+
+  <!-- ✅ Moved Start Button here -->
+  <div class="setting-group">
+    <button id="startBtn" class="start-btn" data-lang-en="Start Game" data-lang-zh="开始游戏">Start Game</button>
+  </div>
+</div>
+</div> 
+
+<div id="gameScreen" style="display: none;">
+<div id="topbar">
+  <div id="score" data-lang-en="Score: 0" data-lang-zh="得分：0">Score: 0</div>
+  
+  <div id="questionArea">
+    <div id="question">Loading...</div>
+    <div id="feedback"></div>
+  </div>
+
+<div id="timer" data-lang-en="Time Left: 60s" data-lang-zh="剩余时间：60秒">Time Left: 60s</div>
+</div>
+
+  <div id="feedback" style="color: white; font-size: 24px; margin: 10px;"></div>
+  <canvas id="gameCanvas" width="600" height="600"></canvas>
+</div>
+
+<div id="endScreen" style="display: none;">
+  <h2 data-lang-en="Game Over" data-lang-zh="游戏结束">Game Over</h2>
+  <p id="finalScore"></p>
+  <p id="finalAccuracy"></p>
+
+  <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+    <button id="restartBtn" data-lang-en="Play Again" data-lang-zh="再玩一次">Play Again</button>
+    <button id="backToMenuBtn" data-lang-en="Back to Menu" data-lang-zh="返回菜单">Back to Menu</button>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+  // 1. Load saved language if previously chosen
+  const langSelect = document.getElementById('languageSelect');
+  const savedLang = localStorage.getItem('gameLang') || 'en'; // default to English
+  langSelect.value = savedLang;
+  setLanguage(savedLang);
+
+  // 2. Listen for change in language selection
+  langSelect.addEventListener('change', () => {
+    const lang = langSelect.value;
+    localStorage.setItem('gameLang', lang);
+    setLanguage(lang);
+  });
+
+  // 3. Update visible text by replacing content of each element
+  function setLanguage(lang) {
+  document.querySelectorAll('[data-lang-en]').forEach(el => {
+    const newText = el.getAttribute(`data-lang-${lang}`);
+    if (!newText) return;
+
+    if (el.tagName === 'OPTION') {
+      el.textContent = newText; // for <option> tags like speed choices
+    } else if (el.tagName === 'INPUT' || el.tagName === 'BUTTON') {
+      el.value = newText; // for inputs or buttons with value
+      el.textContent = newText; // for buttons with text
+    } else {
+      el.innerHTML = newText; // for regular elements like <div>, <label>
+    }
+  });
+}
+</script>
+<!-- 🔊 Audio Elements -->
+<audio id="bgMusic" src="SlitheringNumbers.mp3" loop></audio>
+</body>
+</html>
